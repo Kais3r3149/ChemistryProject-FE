@@ -1,26 +1,351 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
+  /* ── Primary: Emerald ── */
+  --color-primary-50: #ecfdf5;
+  --color-primary-100: #d1fae5;
+  --color-primary-200: #a7f3d0;
+  --color-primary-300: #6ee7b7;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-800: #065f46;
+  --color-primary-900: #064e3b;
+  --color-primary-950: #022c22;
+
+  /* ── Severity Colors ── */
+  --color-severity-safe: #10b981;
+  --color-severity-warning: #f59e0b;
+  --color-severity-danger: #ef4444;
+
+  /* ── Semantic tokens ── */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+  /* ── Typography ── */
+  --font-sans: var(--font-inter);
+
+  /* ── Radius ── */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* ── Custom animations ── */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out;
+  --animate-fade-in-down: fade-in-down 0.5s ease-out;
+  --animate-slide-in-left: slide-in-left 0.5s ease-out;
+  --animate-slide-in-right: slide-in-right 0.5s ease-out;
+  --animate-scale-in: scale-in 0.4s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-gradient: gradient-shift 8s ease infinite;
+  --animate-bounce-subtle: bounce-subtle 2s ease-in-out infinite;
 }
 
+/* ── Keyframes ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ── Light mode (default) ── */
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #059669;
+  --accent: #ecfdf5;
+  --accent-foreground: #065f46;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-accent: #ecfdf5;
+  --sidebar-accent-foreground: #065f46;
+}
+
+/* ── Dark mode ── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #334155;
+    --input: #334155;
+    --ring: #10b981;
+    --accent: #064e3b;
+    --accent-foreground: #a7f3d0;
+    --destructive: #dc2626;
+    --destructive-foreground: #fef2f2;
+
+    /* Sidebar */
+    --sidebar: #1e293b;
+    --sidebar-foreground: #f8fafc;
+    --sidebar-border: #334155;
+    --sidebar-accent: #064e3b;
+    --sidebar-accent-foreground: #a7f3d0;
   }
 }
 
+/* ── Base styles ── */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Focus visible ── */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ── Smooth scrolling ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Selection highlight ── */
+::selection {
+  background-color: #a7f3d0;
+  color: #064e3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: #064e3b;
+    color: #a7f3d0;
+  }
+}
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+}
+
+/* ── Glassmorphism utility ── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ── Gradient text utility ── */
+.text-gradient {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Animated gradient background ── */
+.bg-gradient-animated {
+  background: linear-gradient(-45deg, #ecfdf5, #d1fae5, #f0fdf4, #f8fafc);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bg-gradient-animated {
+    background: linear-gradient(-45deg, #022c22, #064e3b, #0f172a, #1e293b);
+    background-size: 400% 400%;
+  }
+}
+
+/* ── Mesh gradient background ── */
+.bg-mesh {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(at 40% 20%, #d1fae5 0px, transparent 50%),
+    radial-gradient(at 80% 0%, #ecfdf5 0px, transparent 50%),
+    radial-gradient(at 0% 50%, #d1fae5 0px, transparent 50%),
+    radial-gradient(at 80% 80%, #f0fdf4 0px, transparent 50%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bg-mesh {
+    background-color: #0f172a;
+    background-image:
+      radial-gradient(at 40% 20%, #064e3b33 0px, transparent 50%),
+      radial-gradient(at 80% 0%, #022c2233 0px, transparent 50%),
+      radial-gradient(at 0% 50%, #064e3b22 0px, transparent 50%),
+      radial-gradient(at 80% 80%, #065f4622 0px, transparent 50%);
+  }
+}
+
+/* ── Dot pattern background ── */
+.bg-dots {
+  background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bg-dots {
+    background-image: radial-gradient(circle, #334155 1px, transparent 1px);
+  }
+}
+
+/* ── Stagger animation delays for lists ── */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* ── Card hover lift effect ── */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -4px rgba(0, 0, 0, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card-hover:hover {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.3),
+      0 4px 6px -4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* ── Glow effect for primary buttons ── */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-primary:hover {
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+}
+
+/* ── Shimmer loading placeholder ── */
+.shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shimmer {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+  }
 }
