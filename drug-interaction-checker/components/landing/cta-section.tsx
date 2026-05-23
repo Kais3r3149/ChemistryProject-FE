@@ -1,76 +1,49 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function CtaSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 py-24">
-      {/* Background decorations */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full bg-primary-500/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-primary-400/10 blur-3xl" />
-        <div className="absolute inset-0 bg-dots opacity-10" />
-      </div>
+    <section className="bg-primary-700 dark:bg-primary-900 py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
 
-      <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-        <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-primary-100 border border-white/10 mb-8">
-          <Sparkles className="h-4 w-4" />
-          Free for researchers
-        </div>
-
-        <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-          Start Checking Drug
-          <br />
-          Interactions Today
-        </h2>
-
-        <p className="mt-6 text-lg text-primary-100/90 max-w-2xl mx-auto leading-relaxed">
-          Free access to AI-powered drug interaction analysis. Sign up and
-          explore DDI, DTI, PPI interactions, gene-disease associations, and
-          drug response predictions.
-        </p>
-
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <Button
-            size="lg"
-            className="bg-white text-primary-700 hover:bg-primary-50 shadow-xl shadow-primary-900/20 group font-semibold text-base px-8"
-            asChild
-          >
-            <Link href="/register">
-              Create Free Account
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm font-semibold text-base px-8"
-            asChild
-          >
-            <Link href="/login">Sign In</Link>
-          </Button>
-        </div>
-
-        {/* Social proof */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-primary-200/70 text-sm">
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
-              <div className="h-8 w-8 rounded-full bg-primary-300/40 border-2 border-primary-600 flex items-center justify-center text-xs text-white">
-                R
-              </div>
-              <div className="h-8 w-8 rounded-full bg-primary-400/40 border-2 border-primary-600 flex items-center justify-center text-xs text-white">
-                P
-              </div>
-              <div className="h-8 w-8 rounded-full bg-primary-500/40 border-2 border-primary-600 flex items-center justify-center text-xs text-white">
-                M
-              </div>
+          {/* Text */}
+          <div className="space-y-3 max-w-xl">
+            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Ready to check drug interactions?
+            </h2>
+            <p className="text-primary-200/80 leading-relaxed">
+              Free access to DrugBank-sourced interaction data. No credit card required.
+            </p>
+            <div className="flex flex-wrap gap-4 text-xs text-primary-300/70 pt-1">
+              <span>DDI &middot; DTI &middot; Drug-Food &middot; Drug-Condition</span>
+              <span>1.4M+ interaction pairs</span>
             </div>
-            <span>Trusted by researchers</span>
           </div>
-          <span className="hidden sm:inline">•</span>
-          <span>No credit card required</span>
-          <span className="hidden sm:inline">•</span>
-          <span>TDC-powered datasets</span>
+
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <Button
+              size="lg"
+              className="bg-white text-primary-700 hover:bg-primary-50 font-semibold group"
+              asChild
+            >
+              <Link href="/register">
+                Create free account
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="!bg-transparent border-white/40 text-white hover:!bg-white/10 hover:text-white"
+              asChild
+            >
+              <Link href="/login">Sign in</Link>
+            </Button>
+          </div>
+
         </div>
       </div>
     </section>

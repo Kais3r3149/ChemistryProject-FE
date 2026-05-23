@@ -2,8 +2,8 @@ import {
   LayoutDashboard,
   Pill,
   Target,
-  Dna,
-  FlaskConical,
+  Salad,
+  ClipboardList,
   History,
   Settings,
   type LucideIcon,
@@ -24,7 +24,7 @@ interface SeverityConfig {
 
 export const SEVERITY_CONFIG: Record<SeverityLevel, SeverityConfig> = {
   safe: {
-    label: "Safe",
+    label: "Minor",
     color: "text-emerald-700",
     hexColor: "#047857",
     bgColor: "bg-emerald-50",
@@ -32,7 +32,7 @@ export const SEVERITY_CONFIG: Record<SeverityLevel, SeverityConfig> = {
     textColor: "text-emerald-700",
   },
   warning: {
-    label: "Warning",
+    label: "Moderate",
     color: "text-amber-700",
     hexColor: "#b45309",
     bgColor: "bg-amber-50",
@@ -40,7 +40,7 @@ export const SEVERITY_CONFIG: Record<SeverityLevel, SeverityConfig> = {
     textColor: "text-amber-700",
   },
   danger: {
-    label: "Danger",
+    label: "Major",
     color: "text-red-700",
     hexColor: "#b91c1c",
     bgColor: "bg-red-50",
@@ -85,33 +85,22 @@ export const DASHBOARD_NAV: readonly NavGroup[] = [
         description: "Check drug-drug interactions",
       },
       {
+        title: "Drug-Food",
+        href: "/interactions/drug-food",
+        icon: Salad,
+        description: "Drug and food/herb interactions",
+      },
+      {
         title: "Drug-Target (DTI)",
         href: "/interactions/drug-target",
         icon: Target,
-        description: "Drug-target binding prediction",
+        description: "Drug-target binding interactions",
       },
       {
-        title: "Protein-Protein (PPI)",
-        href: "/interactions/protein-protein",
-        icon: Dna,
-        description: "Protein-protein interaction",
-      },
-    ],
-  },
-  {
-    label: "Analysis",
-    items: [
-      {
-        title: "Gene-Disease",
-        href: "/gene-disease",
-        icon: Dna,
-        description: "Gene-disease association",
-      },
-      {
-        title: "Drug Response",
-        href: "/drug-response",
-        icon: FlaskConical,
-        description: "Drug response prediction",
+        title: "Drug-Condition",
+        href: "/interactions/drug-condition",
+        icon: ClipboardList,
+        description: "Indications and toxicity",
       },
     ],
   },
@@ -151,25 +140,25 @@ export const PUBLIC_NAV: readonly PublicNavItem[] = [
 
 export const APP_NAME = "Drug Interaction Checker" as const;
 export const APP_DESCRIPTION =
-  "AI-powered drug interaction analysis using Therapeutics Data Commons" as const;
+  "Drug interaction analysis powered by DrugBank" as const;
 
 export const TDC_FEATURES = [
   {
-    title: "Drug Interactions",
+    title: "Drug-Drug Interactions",
     description:
-      "Check Drug-Drug (DDI), Drug-Target (DTI), and Protein-Protein (PPI) interactions with AI-powered analysis.",
+      "Check interactions between two drugs with severity ratings (major, moderate, minor) sourced from DrugBank — over 1.4 million interaction pairs.",
     icon: "pill" as const,
   },
   {
-    title: "Gene-Disease Association",
+    title: "Drug-Target & Drug-Food",
     description:
-      "Explore associations between genes and diseases using curated TDC datasets for research insights.",
+      "Explore protein targets and food interactions for any drug. Data includes UniProt-linked targets and food/herb interaction descriptions.",
     icon: "dna" as const,
   },
   {
-    title: "Drug Response Prediction",
+    title: "Drug Conditions",
     description:
-      "Predict drug sensitivity and response for specific drug-cell line combinations.",
+      "View indications and toxicity conditions associated with a drug, covering approved uses and known adverse effects from DrugBank.",
     icon: "flask" as const,
   },
 ] as const;

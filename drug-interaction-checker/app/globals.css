@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ── Primary: Emerald ── */
-  --color-primary-50: #ecfdf5;
-  --color-primary-100: #d1fae5;
-  --color-primary-200: #a7f3d0;
-  --color-primary-300: #6ee7b7;
-  --color-primary-400: #34d399;
-  --color-primary-500: #10b981;
-  --color-primary-600: #059669;
-  --color-primary-700: #047857;
-  --color-primary-800: #065f46;
-  --color-primary-900: #064e3b;
-  --color-primary-950: #022c22;
+  /* ── Primary: Slate Blue ── */
+  --color-primary-50:  oklch(0.97 0.012 243);
+  --color-primary-100: oklch(0.93 0.025 243);
+  --color-primary-200: oklch(0.86 0.045 243);
+  --color-primary-300: oklch(0.75 0.065 243);
+  --color-primary-400: oklch(0.62 0.075 243);
+  --color-primary-500: oklch(0.52 0.082 243);
+  --color-primary-600: oklch(0.44 0.078 243);
+  --color-primary-700: oklch(0.36 0.068 243);
+  --color-primary-800: oklch(0.28 0.052 243);
+  --color-primary-900: oklch(0.21 0.038 243);
+  --color-primary-950: oklch(0.14 0.022 243);
 
   /* ── Severity Colors ── */
   --color-severity-safe: #10b981;
@@ -128,18 +128,18 @@
   --muted-foreground: #64748b;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #059669;
-  --accent: #ecfdf5;
-  --accent-foreground: #065f46;
+  --ring: oklch(0.44 0.078 243);
+  --accent: oklch(0.96 0.014 243);
+  --accent-foreground: oklch(0.28 0.052 243);
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
   /* Sidebar */
-  --sidebar: #ffffff;
+  --sidebar: oklch(0.99 0.006 243);
   --sidebar-foreground: #0f172a;
   --sidebar-border: #e2e8f0;
-  --sidebar-accent: #ecfdf5;
-  --sidebar-accent-foreground: #065f46;
+  --sidebar-accent: oklch(0.96 0.014 243);
+  --sidebar-accent-foreground: oklch(0.28 0.052 243);
 }
 
 /* ── Dark mode ── */
@@ -153,18 +153,18 @@
     --muted-foreground: #94a3b8;
     --border: #334155;
     --input: #334155;
-    --ring: #10b981;
-    --accent: #064e3b;
-    --accent-foreground: #a7f3d0;
+    --ring: oklch(0.62 0.075 243);
+    --accent: oklch(0.22 0.032 243);
+    --accent-foreground: oklch(0.86 0.045 243);
     --destructive: #dc2626;
     --destructive-foreground: #fef2f2;
 
     /* Sidebar */
-    --sidebar: #1e293b;
+    --sidebar: oklch(0.16 0.018 243);
     --sidebar-foreground: #f8fafc;
     --sidebar-border: #334155;
-    --sidebar-accent: #064e3b;
-    --sidebar-accent-foreground: #a7f3d0;
+    --sidebar-accent: oklch(0.22 0.032 243);
+    --sidebar-accent-foreground: oklch(0.86 0.045 243);
   }
 }
 
@@ -190,14 +190,14 @@ html {
 
 /* ── Selection highlight ── */
 ::selection {
-  background-color: #a7f3d0;
-  color: #064e3b;
+  background-color: oklch(0.86 0.045 243);
+  color: oklch(0.21 0.038 243);
 }
 
 @media (prefers-color-scheme: dark) {
   ::selection {
-    background-color: #064e3b;
-    color: #a7f3d0;
+    background-color: oklch(0.28 0.052 243);
+    color: oklch(0.93 0.025 243);
   }
 }
 
@@ -244,24 +244,35 @@ html {
   }
 }
 
-/* ── Gradient text utility ── */
+/* ── Accent text utility ── */
 .text-gradient {
-  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: oklch(0.44 0.078 243);
+}
+
+@media (prefers-color-scheme: dark) {
+  .text-gradient {
+    color: oklch(0.75 0.065 243);
+  }
 }
 
 /* ── Animated gradient background ── */
 .bg-gradient-animated {
-  background: linear-gradient(-45deg, #ecfdf5, #d1fae5, #f0fdf4, #f8fafc);
+  background: linear-gradient(-45deg,
+    oklch(0.97 0.012 243),
+    oklch(0.93 0.025 243),
+    oklch(0.96 0.008 250),
+    #f8fafc);
   background-size: 400% 400%;
   animation: gradient-shift 8s ease infinite;
 }
 
 @media (prefers-color-scheme: dark) {
   .bg-gradient-animated {
-    background: linear-gradient(-45deg, #022c22, #064e3b, #0f172a, #1e293b);
+    background: linear-gradient(-45deg,
+      oklch(0.14 0.022 243),
+      oklch(0.18 0.028 243),
+      #0f172a,
+      #1e293b);
     background-size: 400% 400%;
   }
 }
@@ -270,20 +281,20 @@ html {
 .bg-mesh {
   background-color: #f8fafc;
   background-image:
-    radial-gradient(at 40% 20%, #d1fae5 0px, transparent 50%),
-    radial-gradient(at 80% 0%, #ecfdf5 0px, transparent 50%),
-    radial-gradient(at 0% 50%, #d1fae5 0px, transparent 50%),
-    radial-gradient(at 80% 80%, #f0fdf4 0px, transparent 50%);
+    radial-gradient(at 40% 20%, oklch(0.93 0.025 243 / 0.5) 0px, transparent 50%),
+    radial-gradient(at 80% 0%,  oklch(0.97 0.012 243 / 0.7) 0px, transparent 50%),
+    radial-gradient(at 0%  50%, oklch(0.93 0.025 243 / 0.4) 0px, transparent 50%),
+    radial-gradient(at 80% 80%, oklch(0.96 0.008 250 / 0.5) 0px, transparent 50%);
 }
 
 @media (prefers-color-scheme: dark) {
   .bg-mesh {
     background-color: #0f172a;
     background-image:
-      radial-gradient(at 40% 20%, #064e3b33 0px, transparent 50%),
-      radial-gradient(at 80% 0%, #022c2233 0px, transparent 50%),
-      radial-gradient(at 0% 50%, #064e3b22 0px, transparent 50%),
-      radial-gradient(at 80% 80%, #065f4622 0px, transparent 50%);
+      radial-gradient(at 40% 20%, oklch(0.22 0.032 243 / 0.5) 0px, transparent 50%),
+      radial-gradient(at 80% 0%,  oklch(0.18 0.028 243 / 0.4) 0px, transparent 50%),
+      radial-gradient(at 0%  50%, oklch(0.22 0.032 243 / 0.35) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, oklch(0.16 0.018 243 / 0.3) 0px, transparent 50%);
   }
 }
 
@@ -328,12 +339,12 @@ html {
 
 /* ── Glow effect for primary buttons ── */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 0 20px oklch(0.52 0.082 243 / 0.18);
+  transition: box-shadow 0.25s ease;
 }
 
 .glow-primary:hover {
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 28px oklch(0.52 0.082 243 / 0.3);
 }
 
 /* ── Shimmer loading placeholder ── */

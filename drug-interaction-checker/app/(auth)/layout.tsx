@@ -37,25 +37,26 @@ export default function AuthLayout({
                 <br />
                 <span className="text-primary-200">with confidence.</span>
               </h2>
-              <p className="text-primary-100/80 text-lg max-w-md leading-relaxed">
-                AI-powered insights from Therapeutics Data Commons for safer medical decisions.
+              <p className="text-primary-100/80 text-base max-w-md leading-relaxed">
+                Comprehensive interaction data from DrugBank for accurate, research-grade results.
               </p>
             </div>
 
             {/* Feature highlights */}
             <div className="space-y-4">
               {[
-                { icon: Shield, text: "Medical-grade validated datasets" },
-                { icon: Zap, text: "Instant AI-powered analysis" },
-                { icon: Database, text: "22K+ drug pair interactions" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm">
-                    <Icon className="h-5 w-5 text-primary-200" />
+                { icon: Database, label: "1.4M+", text: "drug pair interactions" },
+                { icon: Shield, label: "DrugBank", text: "validated data source" },
+                { icon: Zap, label: "<1s", text: "query response time" },
+              ].map(({ icon: Icon, label, text }) => (
+                <div key={text} className="flex items-center gap-4">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10">
+                    <Icon className="h-4 w-4 text-primary-200" />
                   </div>
-                  <span className="text-sm font-medium text-primary-100">
-                    {text}
-                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-white">{label}</p>
+                    <p className="text-xs text-primary-200/70">{text}</p>
+                  </div>
                 </div>
               ))}
             </div>

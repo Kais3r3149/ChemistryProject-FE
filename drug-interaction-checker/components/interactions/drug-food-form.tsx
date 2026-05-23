@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Search, Loader2, Target, AlertCircle, ExternalLink } from "lucide-react";
+import { Search, Loader2, AlertCircle, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,18 +12,18 @@ import {
 } from "@/components/ui/card";
 import {
   suggestDrugs,
-  searchDti,
+  searchFoodInteractions,
   recordSearch,
   type DrugSuggestItem,
-  type DtiDisplayResult,
+  type FoodInteractionResult,
 } from "@/lib/api";
 import { DrugInput } from "./drug-input";
 
-export function DrugTargetForm() {
+export function DrugFoodForm() {
   const [drugText, setDrugText] = useState("");
   const [selectedDrug, setSelectedDrug] = useState<DrugSuggestItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<DtiDisplayResult[] | null>(null);
+  const [results, setResults] = useState<FoodInteractionResult[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleDrugChange = useCallback((value: string) => {
@@ -53,11 +53,11 @@ export function DrugTargetForm() {
       setSelectedDrug(drug);
       setDrugText(drug.name);
 
-      const data = await searchDti(drug.id);
+      const data = await searchFoodInteractions(drug.id);
       setResults(data);
-      recordSearch("dti", drug.name, data.length);
+      recordSearch("food", drug.name, data.length);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to fetch targets");
+      setError(err instanceof Error ? err.message : "Failed to search interactions");
     } finally {
       setIsLoading(false);
     }
@@ -69,17 +69,17 @@ export function DrugTargetForm() {
     <div className="space-y-6">
       <Card className="border-border/50 shadow-sm">
         <CardHeader className="pb-4">
-          <CardTitle className="text-base font-semibold">Drug-Target Interactions</CardTitle>
+          <CardTitle className="text-base font-semibold">Drug-Food Interactions</CardTitle>
           <CardDescription className="text-sm">
-            View protein targets for a drug from DrugBank.
+            Find known food, beverage, and herb interactions for a drug.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <DrugInput
-              id="dti-drug"
+              id="drug-food"
               label="Drug"
-              placeholder="e.g., Aspirin"
+              placeholder="e.g., Warfarin"
               value={drugText}
               selectedDrug={selectedDrug}
               onChange={handleDrugChange}
@@ -102,12 +102,12 @@ export function DrugTargetForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
+                  Searching...
                 </>
               ) : (
                 <>
                   <Search className="mr-2 h-4 w-4" />
-                  Find Targets
+                  Find Food Interactions
                 </>
               )}
             </Button>
@@ -117,47 +117,29 @@ export function DrugTargetForm() {
 
       {results !== null && (
         <div className="space-y-3 animate-fade-in-up">
-          <h3 className="text-lg font-bold text-foreground">
-            Targets
-            <span className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/30 text-xs font-bold text-blue-700 dark:text-blue-300">
-              {results.length}
-            </span>
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-foreground">
+              Results
+              <span className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-green-100 dark:bg-green-950/30 text-xs font-bold text-green-700 dark:text-green-300">
+                {results.length}
+              </span>
+            </h3>
+          </div>
 
           {results.length === 0 ? (
             <Card className="border-border/50">
               <CardContent className="py-8 text-center text-muted-foreground">
-                No targets found for this drug.
+                No food interactions found for this drug.
               </CardContent>
             </Card>
           ) : (
             <div className="divide-y divide-border rounded-xl border border-border/50 bg-card shadow-sm overflow-hidden">
               {results.map((item) => (
                 <div key={item.id} className="flex items-start gap-3 px-4 py-3.5">
-                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400">
-                    <Target className="h-3.5 w-3.5" />
+                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400">
+                    <Utensils className="h-3.5 w-3.5" />
                   </div>
-                  <div className="flex-1 min-w-0 space-y-0.5">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-foreground">{item.targetName}</span>
-                      {item.uniprotId && (
-                        <a
-                          href={`https://www.uniprot.org/uniprot/${item.uniprotId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-0.5 text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          {item.uniprotId}
-                          <ExternalLink className="h-2.5 w-2.5" />
-                        </a>
-                      )}
-                    </div>
-                    {item.knownAction && (
-                      <p className="text-xs text-muted-foreground">
-                        Action: <span className="font-medium text-foreground">{item.knownAction}</span>
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-sm text-foreground leading-relaxed">{item.interaction}</p>
                 </div>
               ))}
             </div>

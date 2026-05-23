@@ -13,7 +13,7 @@ export default function DTIPage() {
           Drug-Target Interaction (DTI)
         </h1>
         <p className="text-muted-foreground mt-1">
-          Predict binding affinity between a drug compound and a protein target.
+          View protein targets for a drug. Over 24,000 interactions sourced from DrugBank.
         </p>
       </div>
       <DrugTargetForm />

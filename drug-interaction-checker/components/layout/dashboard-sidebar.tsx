@@ -62,18 +62,19 @@ export function DashboardSidebar({ collapsed = false, onToggleCollapse }: Dashbo
                     <Link
                       href={item.href}
                       className={cn(
-                        "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
                         isActive
-                          ? "bg-primary-50 dark:bg-primary-950/30 text-primary-700 dark:text-primary-300 shadow-sm"
-                          : "text-sidebar-foreground/60 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+                          ? "bg-primary-100/70 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800/60"
+                          : "text-sidebar-foreground/60 border border-transparent hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
                         collapsed && "justify-center px-2"
                       )}
                     >
-                      {/* Active indicator bar */}
-                      {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-[3px] rounded-r-full bg-primary-600 dark:bg-primary-400" />
-                      )}
-                      <Icon className={cn("h-[18px] w-[18px] shrink-0", isActive && "text-primary-600 dark:text-primary-400")} />
+                      <Icon className={cn(
+                        "h-4 w-4 shrink-0 transition-colors",
+                        isActive
+                          ? "text-primary-600 dark:text-primary-400"
+                          : "text-sidebar-foreground/40 group-hover:text-sidebar-foreground"
+                      )} />
                       {!collapsed && <span className="truncate">{item.title}</span>}
                     </Link>
                   );

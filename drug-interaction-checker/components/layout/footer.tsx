@@ -23,8 +23,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              AI-powered drug interaction analysis using Therapeutics Data
-              Commons. Check DDI, DTI, PPI interactions, gene-disease associations, and drug response predictions.
+              Comprehensive drug interaction analysis powered by DrugBank.
+              Check DDI, DTI, Drug-Food, and Drug-Condition interactions.
             </p>
             <div className="flex gap-3 pt-1">
               {/* Social icons placeholder */}
@@ -46,10 +46,10 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground mb-4">Features</h3>
             <ul className="space-y-3">
               {[
-                { label: "Drug Interactions", href: "#features" },
-                { label: "Gene-Disease Association", href: "#features" },
-                { label: "Drug Response", href: "#features" },
-                { label: "Protein-Protein", href: "#features" },
+                { label: "Drug-Drug Interactions", href: "#features" },
+                { label: "Drug-Target Interactions", href: "#features" },
+                { label: "Drug-Food Interactions", href: "#features" },
+                { label: "Drug Conditions", href: "#features" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -68,7 +68,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-foreground mb-4">Resources</h3>
             <ul className="space-y-3">
               {[
-                { label: "TDC Documentation", href: "https://tdcommons.ai", external: true },
+                { label: "DrugBank", href: "https://www.drugbank.ca", external: true },
                 { label: "API Reference", href: "#" },
                 { label: "About", href: "#about" },
                 { label: "Contact", href: "#" },
@@ -105,12 +105,12 @@ export function Footer() {
           <p className="text-xs text-muted-foreground flex items-center gap-1">
             Made with <Heart className="h-3 w-3 text-red-400 fill-red-400" /> · Data:{" "}
             <a
-              href="https://tdcommons.ai"
+              href="https://www.drugbank.ca"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-foreground transition-colors"
             >
-              TDC
+              DrugBank
             </a>
           </p>
         </div>

@@ -1,14 +1,51 @@
 "use client";
 
-import { Menu, Search, Bell, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Menu, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { getToken, clearToken } from "@/lib/api";
 
 interface DashboardTopbarProps {
   onToggleSidebar?: () => void;
 }
 
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+function getUserFromToken(): { email: string; fullName?: string } | null {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return { email: payload.email as string };
+  } catch {
+    return null;
+  }
+}
+
 export function DashboardTopbar({ onToggleSidebar }: DashboardTopbarProps) {
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string>("");
+
+  useEffect(() => {
+    const user = getUserFromToken();
+    if (user) Promise.resolve().then(() => setUserEmail(user.email));
+  }, []);
+
+  const handleLogout = () => {
+    clearToken();
+    router.push("/login");
+  };
+
+  const initials = userEmail ? getInitials(userEmail.split("@")[0]) : "U";
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b border-border/40 bg-card/80 backdrop-blur-xl px-4 sm:px-6">
       {/* Sidebar toggle */}
@@ -22,28 +59,28 @@ export function DashboardTopbar({ onToggleSidebar }: DashboardTopbarProps) {
         <Menu className="h-5 w-5" />
       </Button>
 
-      {/* Search */}
-      <div className="flex-1 max-w-md">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search drugs, targets, genes..."
-            className="pl-9 h-10 bg-muted/50 border-transparent hover:border-border focus-visible:border-border focus-visible:bg-background transition-colors"
-          />
-        </div>
-      </div>
+      {/* Spacer */}
+      <div className="flex-1" />
 
-      {/* Right side */}
-      <div className="flex items-center gap-1 ml-auto">
-        <Button variant="ghost" size="icon" className="rounded-lg relative" aria-label="Notifications">
-          <Bell className="h-5 w-5" />
-          {/* Notification dot */}
-          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary-500 ring-2 ring-card" />
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-lg" aria-label="User profile">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-xs font-bold text-white">
-            U
-          </div>
+      {/* Right side: user + logout */}
+      <div className="flex items-center gap-3">
+        {userEmail && (
+          <span className="hidden sm:block text-sm text-muted-foreground truncate max-w-[160px]">
+            {userEmail}
+          </span>
+        )}
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary-700 text-xs font-bold text-white select-none">
+          {initials}
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-lg text-muted-foreground hover:text-foreground"
+          onClick={handleLogout}
+          aria-label="Sign out"
+          title="Sign out"
+        >
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     </header>

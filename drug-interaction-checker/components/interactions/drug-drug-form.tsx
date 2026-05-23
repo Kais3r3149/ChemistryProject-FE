@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Search, Loader2, Sparkles, ArrowRightLeft, AlertCircle } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Search, Loader2, ArrowRightLeft, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -16,155 +14,11 @@ import { InteractionResultCard } from "@/components/dashboard/interaction-result
 import {
   suggestDrugs,
   searchDdi,
+  recordSearch,
   type DrugSuggestItem,
   type DdiDisplayResult,
 } from "@/lib/api";
-
-// ── Debounce hook ──
-
-function useDebounce(value: string, delay: number): string {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-// ── Drug Autocomplete Input ──
-
-interface DrugInputProps {
-  readonly id: string;
-  readonly label: string;
-  readonly placeholder: string;
-  readonly value: string;
-  readonly selectedDrug: DrugSuggestItem | null;
-  readonly onChange: (value: string) => void;
-  readonly onSelect: (drug: DrugSuggestItem) => void;
-}
-
-function DrugInput({
-  id,
-  label,
-  placeholder,
-  value,
-  selectedDrug,
-  onChange,
-  onSelect,
-}: DrugInputProps) {
-  const [suggestions, setSuggestions] = useState<DrugSuggestItem[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const debouncedQuery = useDebounce(value, 300);
-
-  // Fetch suggestions when debounced query changes
-  useEffect(() => {
-    if (debouncedQuery.length < 2 || selectedDrug !== null) {
-      setSuggestions([]);
-      return;
-    }
-
-    let cancelled = false;
-    setIsLoadingSuggestions(true);
-
-    suggestDrugs(debouncedQuery, 8)
-      .then((results) => {
-        if (!cancelled) {
-          setSuggestions(results);
-          setIsOpen(results.length > 0);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setSuggestions([]);
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoadingSuggestions(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedQuery, selectedDrug]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value);
-    },
-    [onChange],
-  );
-
-  const handleSelect = useCallback(
-    (drug: DrugSuggestItem) => {
-      onSelect(drug);
-      onChange(drug.name);
-      setIsOpen(false);
-      setSuggestions([]);
-    },
-    [onSelect, onChange],
-  );
-
-  return (
-    <div className="space-y-2" ref={wrapperRef}>
-      <Label htmlFor={id} className="font-medium">
-        {label}
-      </Label>
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        {isLoadingSuggestions && (
-          <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground animate-spin" />
-        )}
-        <Input
-          id={id}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleInputChange}
-          onFocus={() => {
-            if (suggestions.length > 0) setIsOpen(true);
-          }}
-          className="pl-9 h-11"
-          autoComplete="off"
-        />
-        {/* Dropdown suggestions */}
-        {isOpen && suggestions.length > 0 && (
-          <div className="absolute z-50 mt-1 w-full rounded-lg border border-border bg-card shadow-lg max-h-60 overflow-y-auto">
-            {suggestions.map((drug) => (
-              <button
-                key={drug.id}
-                type="button"
-                className="w-full text-left px-3 py-2 text-sm hover:bg-muted/50 transition-colors first:rounded-t-lg last:rounded-b-lg"
-                onClick={() => handleSelect(drug)}
-              >
-                <span className="font-medium">{drug.name}</span>
-                {drug.drugbankId && (
-                  <span className="ml-2 text-xs text-muted-foreground">
-                    {drug.drugbankId}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+import { DrugInput } from "./drug-input";
 
 // ── Main Form ──
 
@@ -247,6 +101,7 @@ export function DrugDrugForm() {
 
       const data = await searchDdi(drugA.id, drugB.id);
       setResults(data);
+      recordSearch("ddi", `${drugA.name} + ${drugB.name}`, data.length);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to search interactions";
@@ -269,20 +124,11 @@ export function DrugDrugForm() {
   return (
     <div className="space-y-6">
       <Card className="border-border/50 shadow-sm">
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <CardTitle className="text-lg">
-                Check Drug-Drug Interaction
-              </CardTitle>
-              <CardDescription>
-                Enter two drug names to check for potential interactions.
-              </CardDescription>
-            </div>
-          </div>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base font-semibold">Drug-Drug Interaction</CardTitle>
+          <CardDescription className="text-sm">
+            Enter two drug names to check for known interactions.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

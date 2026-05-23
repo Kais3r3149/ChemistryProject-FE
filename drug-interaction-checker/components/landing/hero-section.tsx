@@ -1,130 +1,137 @@
 import Link from "next/link";
-import { ArrowRight, Shield, Sparkles, Zap, Database } from "lucide-react";
+import { ArrowRight, Pill, Search, Shield, Database, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { APP_NAME } from "@/lib/constants";
+
+const MOCK_RESULTS = [
+  { drug: "Aspirin", severity: "moderate", label: "Moderate", color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-950/30", border: "border-amber-200 dark:border-amber-800/40" },
+  { drug: "Warfarin", severity: "major", label: "Major", color: "text-red-600", bg: "bg-red-50 dark:bg-red-950/30", border: "border-red-200 dark:border-red-800/40" },
+  { drug: "Ibuprofen", severity: "minor", label: "Minor", color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-950/30", border: "border-emerald-200 dark:border-emerald-800/40" },
+];
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-mesh min-h-[90vh] flex items-center">
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-primary-200/30 blur-3xl animate-float" />
-        <div className="absolute top-1/2 -left-32 h-96 w-96 rounded-full bg-primary-300/20 blur-3xl animate-float stagger-2" />
-        <div className="absolute -bottom-20 right-1/4 h-64 w-64 rounded-full bg-primary-100/40 blur-3xl animate-pulse-soft" />
-      </div>
+    <section className="relative overflow-hidden bg-mesh min-h-[88vh] flex items-center">
+      <div className="absolute inset-0 -z-10 bg-mesh" />
 
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20 items-center">
-          {/* Text content */}
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 w-full">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20 items-center">
+
+          {/* Left: text */}
           <div className="space-y-8 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary-200/60 bg-primary-50/80 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-primary-700 shadow-sm">
-              <Sparkles className="h-4 w-4 animate-pulse-soft" />
-              Powered by TDC & AI
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary-600 dark:text-primary-400">
+                Powered by DrugBank
+              </p>
+              <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl leading-[1.05]">
+                Drug Interaction
+                <br />
+                <span className="text-primary-600 dark:text-primary-400">Analysis Tool</span>
+              </h1>
             </div>
 
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-              <span className="text-foreground">Analyze Drug</span>
-              <br />
-              <span className="text-gradient">Interactions Safely</span>
-            </h1>
-
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-              AI-powered analysis for drug-drug, drug-target, and
-              protein-protein interactions. Explore gene-disease associations and
-              predict drug responses with data from{" "}
-              <span className="font-medium text-foreground">Therapeutics Data Commons</span>.
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-md">
+              Check drug-drug, drug-target, food, and condition interactions sourced from{" "}
+              <span className="font-semibold text-foreground">DrugBank</span>{" "}
+              — over 1.4 million interaction pairs.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="glow-primary group" asChild>
+            <div className="flex flex-wrap gap-3">
+              <Button size="lg" className="glow-primary font-semibold group" asChild>
                 <Link href="/register">
-                  Get Started Free
+                  Get started free
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" className="group" asChild>
-                <Link href="#features">
-                  Learn More
-                  <ArrowRight className="ml-2 h-4 w-4 opacity-0 transition-all group-hover:opacity-100 group-hover:translate-x-1" />
-                </Link>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/login">Sign in</Link>
               </Button>
             </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap items-center gap-6 pt-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-                  <Shield className="h-4 w-4" />
+            {/* Stat row */}
+            <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2 border-t border-border/50">
+              {[
+                { icon: Database, val: "1.4M+", sub: "interaction pairs" },
+                { icon: Shield, val: "DrugBank", sub: "validated source" },
+                { icon: Pill, val: "4 tools", sub: "DDI, DTI, Food, Condition" },
+              ].map(({ icon: Icon, val, sub }) => (
+                <div key={val} className="flex items-center gap-2">
+                  <Icon className="h-4 w-4 text-primary-500 shrink-0" />
+                  <div>
+                    <span className="text-sm font-bold text-foreground">{val}</span>
+                    <span className="text-sm text-muted-foreground ml-1.5">{sub}</span>
+                  </div>
                 </div>
-                Medical-grade data
+              ))}
+            </div>
+          </div>
+
+          {/* Right: UI mockup */}
+          <div className="hidden lg:block animate-fade-in stagger-2">
+            <div className="rounded-2xl border border-border/60 bg-card shadow-2xl shadow-black/8 overflow-hidden">
+              {/* Mockup topbar */}
+              <div className="flex items-center gap-2 border-b border-border/60 bg-muted/40 px-4 py-3">
+                <div className="flex gap-1.5">
+                  <div className="h-3 w-3 rounded-full bg-red-400/60" />
+                  <div className="h-3 w-3 rounded-full bg-amber-400/60" />
+                  <div className="h-3 w-3 rounded-full bg-emerald-400/60" />
+                </div>
+                <div className="flex-1 mx-3 flex items-center gap-2 rounded-md bg-background/80 border border-border/50 px-3 py-1.5 text-xs text-muted-foreground">
+                  <Search className="h-3 w-3" />
+                  Drug-Drug Interaction
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-                  <Database className="h-4 w-4" />
+
+              {/* Mockup body */}
+              <div className="p-5 space-y-4">
+                {/* Search bar mock */}
+                <div className="flex gap-3">
+                  <div className="flex-1 rounded-lg border border-border bg-background/60 px-3 py-2.5 text-sm text-foreground font-medium">
+                    Metformin
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-dashed border-border/60 text-muted-foreground/40">
+                    +
+                  </div>
+                  <div className="flex-1 rounded-lg border border-border bg-background/60 px-3 py-2.5 text-sm text-foreground font-medium">
+                    Lisinopril
+                  </div>
+                  <div className="flex items-center justify-center rounded-lg bg-primary-600 px-4 text-xs font-semibold text-white whitespace-nowrap">
+                    Check
+                  </div>
                 </div>
-                Research-validated
-              </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
-                  <Zap className="h-4 w-4" />
+
+                {/* Result label */}
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">Results</p>
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/40 text-[10px] font-bold text-primary-700 dark:text-primary-300">
+                    {MOCK_RESULTS.length}
+                  </span>
                 </div>
-                Instant results
+
+                {/* Result rows */}
+                <div className="space-y-2">
+                  {MOCK_RESULTS.map((r) => (
+                    <div key={r.drug} className={`flex items-center justify-between rounded-lg border px-3 py-2.5 ${r.border} ${r.bg}`}>
+                      <div className="flex items-center gap-2.5">
+                        <Pill className={`h-3.5 w-3.5 ${r.color}`} />
+                        <span className="text-sm font-medium text-foreground">
+                          Metformin + {r.drug}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-xs font-semibold ${r.color}`}>{r.label}</span>
+                        <ChevronRight className="h-3 w-3 text-muted-foreground/40" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-center text-xs text-muted-foreground/50 pt-1">
+                  Source: DrugBank Open Data
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Hero illustration */}
-          <div className="hidden lg:flex items-center justify-center animate-fade-in stagger-3">
-            <div className="relative">
-              {/* Outer glow ring */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary-400/20 to-primary-600/20 blur-xl scale-105" />
-
-              {/* Main card */}
-              <div className="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-br from-white/80 to-primary-50/80 dark:from-slate-800/80 dark:to-primary-950/50 backdrop-blur-xl border border-primary-200/30 shadow-2xl shadow-primary-500/10 flex items-center justify-center overflow-hidden">
-                {/* Grid dots overlay */}
-                <div className="absolute inset-0 bg-dots opacity-30" />
-
-                {/* Decorative floating elements */}
-                <div className="absolute -top-4 -right-4 w-28 h-28 rounded-2xl bg-gradient-to-br from-primary-200/40 to-primary-300/20 rotate-12 animate-float" />
-                <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-2xl bg-gradient-to-br from-primary-200/30 to-primary-100/20 -rotate-6 animate-float stagger-2" />
-                <div className="absolute top-1/4 -right-3 w-16 h-16 rounded-xl bg-primary-300/20 rotate-45 animate-bounce-subtle" />
-
-                <div className="relative text-center space-y-6 p-8 z-10">
-                  <div className="text-7xl animate-float">🧬</div>
-                  <p className="text-base font-semibold text-primary-700 dark:text-primary-300">
-                    Drug Interaction Analysis
-                  </p>
-                  <div className="flex justify-center gap-3">
-                    <span className="inline-flex items-center rounded-full bg-emerald-100/80 dark:bg-emerald-900/30 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 shadow-sm border border-emerald-200/50 dark:border-emerald-800/30">
-                      🔬 DDI
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-amber-100/80 dark:bg-amber-900/30 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300 shadow-sm border border-amber-200/50 dark:border-amber-800/30">
-                      🎯 DTI
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-blue-100/80 dark:bg-blue-900/30 px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 shadow-sm border border-blue-200/50 dark:border-blue-800/30">
-                      🧪 PPI
-                    </span>
-                  </div>
-
-                  {/* Fake mini stat bar */}
-                  <div className="flex justify-center gap-6 pt-2 text-xs text-muted-foreground">
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-foreground">22K+</p>
-                      <p>Drug Pairs</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-foreground">99.2%</p>
-                      <p>Accuracy</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-lg font-bold text-foreground">&lt;1s</p>
-                      <p>Response</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

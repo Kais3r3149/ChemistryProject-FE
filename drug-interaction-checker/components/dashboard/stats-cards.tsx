@@ -1,85 +1,93 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Pill, AlertTriangle, ShieldCheck, Search, TrendingUp } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+"use client";
 
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  description?: string;
-  icon: LucideIcon;
-  iconColor: string;
-  iconBg: string;
-  trend?: string;
+import { useEffect, useState } from "react";
+import { Pill, Target, Salad, ClipboardList } from "lucide-react";
+import { fetchDashboardStats, type DashboardStats } from "@/lib/api";
+import { cn } from "@/lib/utils";
+
+interface StatItem {
+  label: string;
+  value: number | null;
+  sub: string;
+  color: string;
+  dot: string;
 }
 
-function StatCard({ title, value, description, icon: Icon, iconColor, iconBg, trend }: StatCardProps) {
-  return (
-    <Card className="card-hover border-border/50 overflow-hidden">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-3xl font-bold tracking-tight text-foreground">{value}</p>
-            {description && (
-              <div className="flex items-center gap-1.5">
-                {trend && (
-                  <TrendingUp className="h-3 w-3 text-primary-500" />
-                )}
-                <p className="text-xs text-muted-foreground">{description}</p>
-              </div>
-            )}
-          </div>
-          <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${iconBg} ${iconColor} transition-transform duration-200`}>
-            <Icon className="h-6 w-6" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+function fmt(n: number | null): string {
+  if (n === null) return "—";
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
+  return n.toLocaleString();
 }
 
 export function StatsCards() {
-  // Mock data — will be replaced with real API data
-  const stats: StatCardProps[] = [
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    fetchDashboardStats()
+      .then((s) => { setStats(s); setLoaded(true); })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  const items: StatItem[] = [
     {
-      title: "Total Searches",
-      value: 0,
-      description: "All-time queries",
-      icon: Search,
-      iconColor: "text-blue-600 dark:text-blue-400",
-      iconBg: "bg-blue-50 dark:bg-blue-950/30",
+      label: "Drug-Drug",
+      value: stats?.totalDDIs ?? null,
+      sub: "interaction pairs",
+      color: "text-primary-600 dark:text-primary-400",
+      dot: "bg-primary-500",
     },
     {
-      title: "Interactions Found",
-      value: 0,
-      description: "Across all types",
-      icon: Pill,
-      iconColor: "text-primary-600 dark:text-primary-400",
-      iconBg: "bg-primary-50 dark:bg-primary-950/30",
+      label: "Drug-Target",
+      value: stats?.totalDTIs ?? null,
+      sub: "binding records",
+      color: "text-blue-600 dark:text-blue-400",
+      dot: "bg-blue-500",
     },
     {
-      title: "Dangerous",
-      value: 0,
-      description: "High severity alerts",
-      icon: AlertTriangle,
-      iconColor: "text-red-600 dark:text-red-400",
-      iconBg: "bg-red-50 dark:bg-red-950/30",
+      label: "Drug-Food",
+      value: stats?.totalFoodInteractions ?? null,
+      sub: "food interactions",
+      color: "text-emerald-600 dark:text-emerald-400",
+      dot: "bg-emerald-500",
     },
     {
-      title: "Safe Results",
-      value: 0,
-      description: "No interaction detected",
-      icon: ShieldCheck,
-      iconColor: "text-emerald-600 dark:text-emerald-400",
-      iconBg: "bg-emerald-50 dark:bg-emerald-950/30",
+      label: "Conditions",
+      value: stats?.totalConditions ?? null,
+      sub: "indications & toxicity",
+      color: "text-violet-600 dark:text-violet-400",
+      dot: "bg-violet-500",
     },
   ];
 
+  const icons = [Pill, Target, Salad, ClipboardList];
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat) => (
-        <StatCard key={stat.title} {...stat} />
-      ))}
+    <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-border/60 rounded-xl border border-border/60 overflow-hidden bg-card">
+      {items.map((item, i) => {
+        const Icon = icons[i];
+        return (
+          <div key={item.label} className="flex flex-col gap-3 p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+                {item.label}
+              </span>
+              <Icon className={cn("h-3.5 w-3.5", item.color)} />
+            </div>
+            <div>
+              <p className={cn(
+                "text-3xl font-bold tabular-nums tracking-tight transition-opacity duration-300",
+                !loaded && "opacity-30",
+                item.color
+              )}>
+                {fmt(item.value)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">{item.sub}</p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

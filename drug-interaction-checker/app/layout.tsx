@@ -14,15 +14,14 @@ export const metadata: Metadata = {
     template: "%s | Drug Interaction Checker",
   },
   description:
-    "AI-powered drug interaction analysis. Check drug-drug, drug-target, and protein-protein interactions with data from Therapeutics Data Commons.",
+    "Comprehensive drug interaction analysis powered by DrugBank. Check drug-drug, drug-target, drug-food, and drug-condition interactions.",
   keywords: [
     "drug interaction",
     "DDI",
     "DTI",
-    "PPI",
-    "gene-disease association",
-    "drug response",
-    "TDC",
+    "DrugBank",
+    "drug-food interaction",
+    "drug conditions",
     "pharmacology",
   ],
 };
