@@ -22,6 +22,19 @@ export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY);
 }
 
+/** Decode JWT payload and check if it is expired (client-side check). */
+export function isTokenExpired(): boolean {
+  const token = getToken();
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    // exp is in seconds
+    return Date.now() / 1000 > payload.exp;
+  } catch {
+    return true;
+  }
+}
+
 // ── Types (matching BE response shapes) ──
 
 interface ApiSuccessResponse<T> {
@@ -143,6 +156,28 @@ export async function searchDdi(
   }));
 }
 
+export async function searchDdiMulti(
+  drugIds: number[],
+): Promise<DdiDisplayResult[]> {
+  const res = await fetch(`${API_BASE_URL}/ddi/multi`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ drugIds }),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "Unknown error");
+    throw new Error(`API error ${res.status}: ${body}`);
+  }
+  const json = (await res.json()) as { success: boolean; data: DdiResultFromApi[] };
+  return json.data.map((item) => ({
+    drugA: item.drugA.name,
+    drugB: item.drugB.name,
+    severity: mapBeSeverityToFe(item.severity),
+    description: item.description ?? "No description available.",
+    source: item.source,
+  }));
+}
+
 // ── Drug-Food Interaction Endpoints ──
 
 export interface FoodInteractionResult {
@@ -187,6 +222,27 @@ export async function searchDrugConditions(
   }));
 }
 
+// ── Side Effects (SIDER) Endpoints ──
+
+export interface SideEffectResult {
+  readonly id: number;
+  readonly effectName: string;
+  readonly effectType: "side_effect" | "indication";
+  readonly cui: string | null;
+}
+
+export async function searchDrugSideEffects(
+  drugId: number,
+  type?: "side_effect" | "indication",
+): Promise<SideEffectResult[]> {
+  const params = new URLSearchParams({ drugId: String(drugId) });
+  if (type) params.set("type", type);
+  const res = await fetch(`${API_BASE_URL}/drug-side-effects/by-drug?${params}`);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  const json = (await res.json()) as { success: boolean; data: SideEffectResult[] };
+  return json.data;
+}
+
 // ── DTI Endpoints ──
 
 export interface DtiDisplayResult {
@@ -210,6 +266,90 @@ export async function searchDti(drugId: number): Promise<DtiDisplayResult[]> {
     knownAction: item.knownAction,
     source: item.source,
   }));
+}
+
+// ── Drug Response Endpoints ──
+
+export interface DrugResponseResult {
+  readonly id: number;
+  readonly drug: { id: number; name: string };
+  readonly cellLine: { id: number; name: string; tissueName: string | null; cancerType: string | null };
+  readonly value: number;
+  readonly metric: string;
+  readonly source: string;
+}
+
+export interface DrugResponseSearchResponse {
+  readonly items: DrugResponseResult[];
+  readonly total: number;
+  readonly page: number;
+  readonly limit: number;
+}
+
+export async function searchDrugResponse(
+  drug: string,
+  cellLine?: string,
+  page = 1,
+  limit = 20,
+): Promise<DrugResponseSearchResponse> {
+  const params = new URLSearchParams({ drug, page: String(page), limit: String(limit) });
+  if (cellLine) params.set("cellLine", cellLine);
+  const res = await fetch(`${API_BASE_URL}/drug-response/by-name?${params}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "Unknown error");
+    throw new Error(`API error ${res.status}: ${body}`);
+  }
+  const json = (await res.json()) as {
+    success: boolean;
+    data: DrugResponseResult[];
+    meta: { total: number; page: number; limit: number };
+  };
+  return { items: json.data, total: json.meta.total, page: json.meta.page, limit: json.meta.limit };
+}
+
+// ── PPI Endpoints ──
+
+export interface PpiResult {
+  readonly id: number;
+  readonly proteinA: { uniprotId: string; name: string | null };
+  readonly proteinB: { uniprotId: string; name: string | null };
+  readonly score: number | null;
+  readonly source: string;
+}
+
+export interface PpiSearchResponse {
+  readonly items: PpiResult[];
+  readonly total: number;
+  readonly page: number;
+  readonly limit: number;
+}
+
+export async function searchPpi(
+  protein: string,
+  page = 1,
+  limit = 20,
+): Promise<PpiSearchResponse> {
+  const params = new URLSearchParams({
+    protein,
+    page: String(page),
+    limit: String(limit),
+  });
+  const res = await fetch(`${API_BASE_URL}/ppi/search?${params}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => "Unknown error");
+    throw new Error(`API error ${res.status}: ${body}`);
+  }
+  const json = (await res.json()) as {
+    success: boolean;
+    data: PpiResult[];
+    meta: { total: number; page: number; limit: number };
+  };
+  return {
+    items: json.data,
+    total: json.meta.total,
+    page: json.meta.page,
+    limit: json.meta.limit,
+  };
 }
 
 // ── Auth Endpoints ──
@@ -259,6 +399,40 @@ export async function registerUser(
   return authPost<AuthResponse>("/auth/register", { fullName, email, password });
 }
 
+export async function forgotPassword(email: string): Promise<{ message: string }> {
+  return authPost<{ message: string }>("/auth/forgot-password", { email });
+}
+
+export async function resetPassword(
+  token: string,
+  newPassword: string,
+): Promise<{ message: string }> {
+  return authPost<{ message: string }>("/auth/reset-password", { token, newPassword });
+}
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+): Promise<{ message: string }> {
+  const token = getToken();
+  const res = await fetch(`${API_BASE_URL}/auth/change-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const message = (body as { message?: string | string[] }).message;
+    throw new Error(
+      Array.isArray(message) ? message[0] : (message ?? `Error ${res.status}`),
+    );
+  }
+  return res.json() as Promise<{ message: string }>;
+}
+
 // ── Dashboard Stats ──
 
 export interface DashboardStats {
@@ -293,6 +467,10 @@ async function apiFetchAuthed<T>(path: string): Promise<T> {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) {
+    if (res.status === 401) {
+      clearToken();
+      if (typeof window !== "undefined") window.location.href = "/login";
+    }
     const body = await res.text().catch(() => "Unknown error");
     throw new Error(`API error ${res.status}: ${body}`);
   }

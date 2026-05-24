@@ -1,14 +1,17 @@
-# ChemistryProject-FE
+# Drug Interaction Checker — Frontend
 
-Frontend cho Drug Interaction Checker — ứng dụng tra cứu tương tác thuốc sử dụng dữ liệu từ DrugBank.
+Ứng dụng tra cứu tương tác thuốc toàn diện sử dụng dữ liệu từ DrugBank, openFDA, SIDER và GDSC2.
+
+> **Disclaimer:** Ứng dụng dành cho mục đích học thuật và nghiên cứu. Không thay thế tư vấn y tế chuyên nghiệp.
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
+- **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v4
 - **UI Components:** Radix UI + shadcn/ui
 - **Icons:** Lucide React
+- **i18n:** next-intl (EN / VI)
 
 ## Yêu cầu
 
@@ -77,9 +80,15 @@ drug-interaction-checker/
 
 ## Tính năng
 
-- **Drug-Drug Interaction (DDI):** Kiểm tra tương tác giữa 2 thuốc, phân loại Major / Moderate / Minor
-- **Drug-Target Interaction (DTI):** Xem các protein/enzyme target của thuốc, liên kết UniProt
-- **Drug-Food Interaction:** Tương tác với thực phẩm, đồ uống, thảo dược
-- **Drug Condition:** Chỉ định điều trị và thông tin độc tính
-- **Search History:** Lưu và hiển thị lịch sử tìm kiếm theo loại
-- **JWT Authentication:** Đăng nhập / đăng ký, hiển thị tên user từ token
+| Module | Mô tả | Dữ liệu |
+|--------|--------|---------|
+| **Drug-Drug (DDI)** | Kiểm tra tương tác ≥2 thuốc, severity Major/Moderate/Minor/Unknown, FDA Label 22 sections | DrugBank 5.1 · 1.4M pairs |
+| **Drug-Food** | Tương tác thực phẩm, đồ uống, thảo dược | DrugBank · 2,558 records |
+| **Drug-Target (DTI)** | Protein/enzyme target của thuốc, liên kết UniProt | DrugBank · 24K records |
+| **Drug-Condition** | Chỉ định điều trị và thông tin độc tính | DrugBank · 7K records |
+| **Side Effects** | Tác dụng phụ từ SIDER | SIDER 4.1 · 77K records |
+| **FDA Label** | Nhãn thuốc FDA đầy đủ 22 sections (live API) | openFDA |
+| **Drug Response** | IC50/AUC sensitivity trên dòng tế bào ung thư | GDSC2 · 93K records |
+| **Search History** | Lưu lịch sử tìm kiếm theo loại | Local |
+| **i18n** | Giao diện song ngữ Tiếng Anh / Tiếng Việt | next-intl |
+| **JWT Auth** | Đăng nhập / đăng ký, bảo vệ route | — |

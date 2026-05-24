@@ -18,6 +18,7 @@ import {
   type DtiDisplayResult,
 } from "@/lib/api";
 import { DrugInput } from "./drug-input";
+import { ResultSkeleton } from "@/components/ui/skeleton-list";
 
 export function DrugTargetForm() {
   const [drugText, setDrugText] = useState("");
@@ -115,7 +116,9 @@ export function DrugTargetForm() {
         </CardContent>
       </Card>
 
-      {results !== null && (
+      {isLoading && <ResultSkeleton rows={4} />}
+
+      {!isLoading && results !== null && (
         <div className="space-y-3 animate-fade-in-up">
           <h3 className="text-lg font-bold text-foreground">
             Targets

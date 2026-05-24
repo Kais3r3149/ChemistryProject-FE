@@ -18,6 +18,7 @@ import {
   type FoodInteractionResult,
 } from "@/lib/api";
 import { DrugInput } from "./drug-input";
+import { ResultSkeleton } from "@/components/ui/skeleton-list";
 
 export function DrugFoodForm() {
   const [drugText, setDrugText] = useState("");
@@ -115,7 +116,9 @@ export function DrugFoodForm() {
         </CardContent>
       </Card>
 
-      {results !== null && (
+      {isLoading && <ResultSkeleton rows={5} />}
+
+      {!isLoading && results !== null && (
         <div className="space-y-3 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-foreground">
