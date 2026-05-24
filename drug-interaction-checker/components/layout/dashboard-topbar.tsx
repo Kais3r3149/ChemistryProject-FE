@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Menu, LogOut } from "lucide-react";
+import { LanguageSwitcher } from "./language-switcher";
 import { Button } from "@/components/ui/button";
 import { getToken, clearToken } from "@/lib/api";
 
@@ -62,8 +63,9 @@ export function DashboardTopbar({ onToggleSidebar }: DashboardTopbarProps) {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Right side: user + logout */}
+      {/* Right side: language + user + logout */}
       <div className="flex items-center gap-3">
+        <LanguageSwitcher />
         {userEmail && (
           <span className="hidden sm:block text-sm text-muted-foreground truncate max-w-[160px]">
             {userEmail}

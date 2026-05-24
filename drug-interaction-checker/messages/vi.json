@@ -1,0 +1,136 @@
+{
+  "app": {
+    "name": "Kiểm Tra Tương Tác Thuốc",
+    "description": "Phân tích tương tác thuốc dựa trên cơ sở dữ liệu DrugBank"
+  },
+  "nav": {
+    "overview": "Tổng Quan",
+    "dashboard": "Bảng Điều Khiển",
+    "interactions": "Tương Tác",
+    "drugDrug": "Thuốc-Thuốc (DDI)",
+    "drugFood": "Thuốc-Thực Phẩm",
+    "drugTarget": "Thuốc-Đích (DTI)",
+    "drugCondition": "Thuốc-Bệnh Lý",
+    "drugResponse": "Đáp Ứng Thuốc",
+    "geneDisease": "Gen-Bệnh (GDA)",
+    "account": "Tài Khoản",
+    "history": "Lịch Sử",
+    "settings": "Cài Đặt",
+    "references": "Tài Liệu",
+    "collapse": "Thu Gọn"
+  },
+  "topbar": {
+    "signOut": "Đăng Xuất",
+    "toggleSidebar": "Mở/Đóng Menu"
+  },
+  "auth": {
+    "login": "Đăng Nhập",
+    "register": "Đăng Ký",
+    "email": "Email",
+    "password": "Mật Khẩu",
+    "fullName": "Họ và Tên",
+    "loginTitle": "Chào mừng trở lại",
+    "loginSubtitle": "Đăng nhập để tiếp tục",
+    "registerTitle": "Tạo tài khoản",
+    "registerSubtitle": "Đăng ký để truy cập phân tích tương tác thuốc",
+    "noAccount": "Chưa có tài khoản?",
+    "hasAccount": "Đã có tài khoản?",
+    "signingIn": "Đang đăng nhập...",
+    "registering": "Đang tạo tài khoản..."
+  },
+  "dashboard": {
+    "title": "Bảng Điều Khiển",
+    "subtitle": "Tổng quan dữ liệu tương tác thuốc",
+    "totalDrugs": "Tổng Số Thuốc",
+    "totalDdi": "Tương Tác Thuốc-Thuốc",
+    "totalDti": "Tương Tác Thuốc-Đích",
+    "totalFood": "Tương Tác Thực Phẩm",
+    "recentSearches": "Tìm Kiếm Gần Đây",
+    "noRecentSearches": "Chưa có tìm kiếm nào",
+    "severityDistribution": "Phân Bố Mức Độ DDI",
+    "major": "Nghiêm Trọng",
+    "moderate": "Trung Bình",
+    "minor": "Nhẹ"
+  },
+  "interactions": {
+    "checkerTitle": "Kiểm Tra Tương Tác Thuốc",
+    "checkerSubtitle": "Thêm nhiều thuốc để kiểm tra tất cả tương tác cùng lúc — bao gồm thuốc-thuốc, thực phẩm, bệnh lý và đích tác dụng.",
+    "addDrugs": "Thêm thuốc cần kiểm tra",
+    "searchPlaceholder": "Tìm thuốc (vd: Warfarin, Ibuprofen, Metformin…)",
+    "checkButton": "Kiểm Tra Tương Tác",
+    "checking": "Đang kiểm tra…",
+    "basketMin": "Cần ít nhất 2 thuốc",
+    "basketMax": "Tối đa 8 thuốc",
+    "ddiTitle": "Tương Tác Thuốc-Thuốc",
+    "ddiFound": "Tìm thấy {count} tương tác trong {n} thuốc",
+    "ddiFoundPlural": "Tìm thấy {count} tương tác trong {n} thuốc",
+    "noInteractions": "Không tìm thấy tương tác giữa các thuốc này.",
+    "drugDetails": "Thông Tin Chi Tiết",
+    "drugDetailsHint": "Nhấn vào tên thuốc để xem tương tác thực phẩm, bệnh lý và đích tác dụng.",
+    "tabs": {
+      "food": "Thực Phẩm",
+      "conditions": "Bệnh Lý",
+      "sideEffects": "Tác Dụng Phụ",
+      "fdaLabel": "Nhãn FDA",
+      "targets": "Đích Tác Dụng"
+    },
+    "noFood": "Không tìm thấy tương tác thực phẩm.",
+    "noConditions": "Không có dữ liệu bệnh lý.",
+    "noSideEffects": "Không có dữ liệu tác dụng phụ (SIDER).",
+    "noFda": "Không tìm thấy nhãn FDA cho thuốc này.",
+    "noTargets": "Không tìm thấy dữ liệu đích tác dụng.",
+    "severity": {
+      "major": "Nghiêm Trọng",
+      "moderate": "Trung Bình",
+      "minor": "Nhẹ",
+      "unknown": "Không Rõ"
+    },
+    "foodTitle": "Tương Tác Thuốc-Thực Phẩm",
+    "foodSubtitle": "Tìm kiếm tương tác thực phẩm và lối sống cho một thuốc.",
+    "drugTargetTitle": "Tương Tác Thuốc-Đích",
+    "drugTargetSubtitle": "Tìm kiếm đích protein của một thuốc (DrugBank).",
+    "drugConditionTitle": "Thuốc-Bệnh Lý",
+    "drugConditionSubtitle": "Tìm kiếm chỉ định và độc tính của một thuốc.",
+    "drugResponseTitle": "Đáp Ứng Thuốc",
+    "drugResponseSubtitle": "Tìm kiếm dữ liệu IC50/AUC từ GDSC2.",
+    "gdaTitle": "Liên Kết Gen-Bệnh",
+    "gdaSubtitle": "Tìm kiếm liên kết gen-bệnh từ DisGeNET."
+  },
+  "common": {
+    "search": "Tìm Kiếm",
+    "loading": "Đang tải…",
+    "error": "Đã xảy ra lỗi",
+    "noResults": "Không tìm thấy kết quả",
+    "source": "Nguồn",
+    "learnMore": "Tìm hiểu thêm",
+    "close": "Đóng",
+    "drugName": "Tên thuốc",
+    "selectDrug": "Chọn thuốc",
+    "page": "Trang",
+    "of": "trên",
+    "results": "kết quả",
+    "language": "Ngôn Ngữ"
+  },
+  "settings": {
+    "title": "Cài Đặt",
+    "subtitle": "Quản lý tài khoản và tùy chọn",
+    "language": "Ngôn Ngữ",
+    "languageDesc": "Chọn ngôn ngữ hiển thị cho ứng dụng",
+    "theme": "Giao Diện",
+    "themeDesc": "Chọn chế độ sáng hoặc tối"
+  },
+  "history": {
+    "title": "Lịch Sử Tìm Kiếm",
+    "subtitle": "Các lần tìm kiếm tương tác thuốc gần đây",
+    "empty": "Chưa có lịch sử tìm kiếm",
+    "emptyHint": "Lịch sử tìm kiếm sẽ xuất hiện ở đây",
+    "type": "Loại",
+    "query": "Truy Vấn",
+    "results": "Kết Quả",
+    "date": "Ngày"
+  },
+  "references": {
+    "title": "Tài Liệu & Nguồn Dữ Liệu",
+    "subtitle": "Các cơ sở dữ liệu khoa học hỗ trợ ứng dụng này"
+  }
+}

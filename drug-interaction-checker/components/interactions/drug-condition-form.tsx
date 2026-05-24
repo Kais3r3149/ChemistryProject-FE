@@ -19,6 +19,90 @@ import {
   type ConditionResult,
 } from "@/lib/api";
 import { DrugInput } from "./drug-input";
+import { CardSkeleton } from "@/components/ui/skeleton-list";
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Strip DrugBank inline references like [L40243], [A12345], [DB001] */
+function stripRefs(text: string): string {
+  return text.replace(/\[[A-Z]\d{4,6}\]/g, "").replace(/\s{2,}/g, " ").trim();
+}
+
+/**
+ * Split text by **Section title** patterns, then render each chunk with
+ * inline bold markers converted to <strong>.
+ */
+function FormatConditionText({ text }: { text: string }) {
+  const clean = stripRefs(text);
+
+  // Split on **Title** markers → produces alternating [before, title, after, title2, ...]
+  const parts = clean.split(/\*\*([^*]+)\*\*/);
+
+  // Build segments: [{heading?, body}]
+  type Seg = { heading: string | null; body: string };
+  const segments: Seg[] = [];
+  let current: Seg = { heading: null, body: "" };
+
+  for (let i = 0; i < parts.length; i++) {
+    if (i % 2 === 0) {
+      // plain text
+      current.body += parts[i];
+    } else {
+      // bold token — if it looks like a section heading (ends with sentence or is stand-alone)
+      const token = parts[i].trim();
+      const isHeading = /^[A-Z]/.test(token) && token.length > 3;
+      if (isHeading && current.body.trim()) {
+        segments.push({ ...current });
+        current = { heading: token, body: "" };
+      } else {
+        // inline bold — wrap in marker
+        current.body += `__BOLD__${token}__ENDBOLD__`;
+      }
+    }
+  }
+  if (current.body.trim() || current.heading) segments.push(current);
+
+  // Render a body string with __BOLD__ markers into React nodes
+  function renderBody(body: string) {
+    const tokens = body.split(/(__BOLD__|__ENDBOLD__)/);
+    const nodes: React.ReactNode[] = [];
+    let bold = false;
+    tokens.forEach((t, i) => {
+      if (t === "__BOLD__") { bold = true; return; }
+      if (t === "__ENDBOLD__") { bold = false; return; }
+      if (!t) return;
+      nodes.push(bold ? <strong key={i} className="font-semibold text-foreground">{t}</strong> : t);
+    });
+    return nodes;
+  }
+
+  if (segments.length <= 1 && !segments[0]?.heading) {
+    // No sections — just render plain paragraphs split by ". "
+    const sentences = clean.split(/(?<=\.)\s+/);
+    return (
+      <div className="space-y-1.5 text-sm text-foreground/90 leading-relaxed">
+        {sentences.map((s, i) => s.trim() && <p key={i}>{s.trim()}</p>)}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 text-sm text-foreground/90">
+      {segments.map((seg, i) => (
+        <div key={i} className={seg.heading ? "space-y-1" : undefined}>
+          {seg.heading && (
+            <p className="font-semibold text-foreground/80 text-xs uppercase tracking-wide">
+              {seg.heading}
+            </p>
+          )}
+          {seg.body.trim() && (
+            <p className="leading-relaxed">{renderBody(seg.body.trim())}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const TYPE_CONFIG = {
   indication: {
@@ -143,7 +227,13 @@ export function DrugConditionForm() {
         </CardContent>
       </Card>
 
-      {results !== null && (
+      {isLoading && (
+        <div className="space-y-3">
+          {[4, 3, 4].map((lines, i) => <CardSkeleton key={i} lines={lines} />)}
+        </div>
+      )}
+
+      {!isLoading && results !== null && (
         <div className="space-y-4 animate-fade-in-up">
           {/* Filter tabs */}
           <div className="flex items-center gap-2">
@@ -199,8 +289,8 @@ export function DrugConditionForm() {
                         {cfg.label}
                       </span>
                     </div>
-                    <div className="px-4 py-3">
-                      <p className="text-sm text-foreground leading-relaxed">{item.text}</p>
+                    <div className="px-4 py-4">
+                      <FormatConditionText text={item.text} />
                     </div>
                   </div>
                 );

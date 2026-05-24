@@ -1,11 +1,14 @@
 import {
   LayoutDashboard,
   Pill,
-  Target,
   Salad,
   ClipboardList,
+  Target,
+  Dna,
+  FlaskConical,
   History,
   Settings,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -53,22 +56,27 @@ export const SEVERITY_CONFIG: Record<SeverityLevel, SeverityConfig> = {
 
 export interface NavItem {
   readonly title: string;
+  readonly titleKey: string;
   readonly href: string;
   readonly icon: LucideIcon;
   readonly description?: string;
+  readonly badge?: string;
 }
 
 export interface NavGroup {
   readonly label: string;
+  readonly labelKey: string;
   readonly items: readonly NavItem[];
 }
 
 export const DASHBOARD_NAV: readonly NavGroup[] = [
   {
     label: "Overview",
+    labelKey: "overview",
     items: [
       {
         title: "Dashboard",
+        titleKey: "dashboard",
         href: "/dashboard",
         icon: LayoutDashboard,
         description: "Overview & statistics",
@@ -77,47 +85,77 @@ export const DASHBOARD_NAV: readonly NavGroup[] = [
   },
   {
     label: "Interactions",
+    labelKey: "interactions",
     items: [
       {
         title: "Drug-Drug (DDI)",
+        titleKey: "drugDrug",
         href: "/interactions",
         icon: Pill,
         description: "Check drug-drug interactions",
       },
       {
         title: "Drug-Food",
+        titleKey: "drugFood",
         href: "/interactions/drug-food",
         icon: Salad,
         description: "Drug and food/herb interactions",
       },
       {
         title: "Drug-Target (DTI)",
+        titleKey: "drugTarget",
         href: "/interactions/drug-target",
         icon: Target,
         description: "Drug-target binding interactions",
       },
       {
         title: "Drug-Condition",
+        titleKey: "drugCondition",
         href: "/interactions/drug-condition",
         icon: ClipboardList,
         description: "Indications and toxicity",
+      },
+      {
+        title: "Drug Response",
+        titleKey: "drugResponse",
+        href: "/interactions/drug-response",
+        icon: FlaskConical,
+        description: "IC50/AUC sensitivity (GDSC2)",
+      },
+      {
+        title: "Gene-Disease (GDA)",
+        titleKey: "geneDisease",
+        href: "/interactions/gene-disease",
+        icon: Dna,
+        description: "Gene-disease associations",
+        badge: "Soon",
       },
     ],
   },
   {
     label: "Account",
+    labelKey: "account",
     items: [
       {
         title: "History",
+        titleKey: "history",
         href: "/history",
         icon: History,
         description: "Search history",
       },
       {
         title: "Settings",
+        titleKey: "settings",
         href: "/settings",
         icon: Settings,
         description: "Account settings",
+      },
+      {
+        title: "References",
+        titleKey: "references",
+        href: "/references",
+        icon: BookOpen,
+        description: "Data sources and citations",
       },
     ],
   },

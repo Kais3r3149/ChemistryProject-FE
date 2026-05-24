@@ -1,0 +1,136 @@
+{
+  "app": {
+    "name": "Drug Interaction Checker",
+    "description": "Drug interaction analysis powered by DrugBank"
+  },
+  "nav": {
+    "overview": "Overview",
+    "dashboard": "Dashboard",
+    "interactions": "Interactions",
+    "drugDrug": "Drug-Drug (DDI)",
+    "drugFood": "Drug-Food",
+    "drugTarget": "Drug-Target (DTI)",
+    "drugCondition": "Drug-Condition",
+    "drugResponse": "Drug Response",
+    "geneDisease": "Gene-Disease (GDA)",
+    "account": "Account",
+    "history": "History",
+    "settings": "Settings",
+    "references": "References",
+    "collapse": "Collapse"
+  },
+  "topbar": {
+    "signOut": "Sign out",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to your account to continue",
+    "registerTitle": "Create an account",
+    "registerSubtitle": "Join to access drug interaction analysis",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signingIn": "Signing in...",
+    "registering": "Creating account..."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of drug interaction data",
+    "totalDrugs": "Total Drugs",
+    "totalDdi": "Drug-Drug Interactions",
+    "totalDti": "Drug-Target Interactions",
+    "totalFood": "Food Interactions",
+    "recentSearches": "Recent Searches",
+    "noRecentSearches": "No recent searches",
+    "severityDistribution": "DDI Severity Distribution",
+    "major": "Major",
+    "moderate": "Moderate",
+    "minor": "Minor"
+  },
+  "interactions": {
+    "checkerTitle": "Drug Interaction Checker",
+    "checkerSubtitle": "Add multiple drugs to check all interactions at once — including drug-drug, food, conditions, and targets.",
+    "addDrugs": "Add drugs to check",
+    "searchPlaceholder": "Search a drug (e.g., Warfarin, Ibuprofen, Metformin…)",
+    "checkButton": "Check Interactions",
+    "checking": "Checking…",
+    "basketMin": "Add at least 2 drugs",
+    "basketMax": "Maximum 8 drugs",
+    "ddiTitle": "Drug-Drug Interactions",
+    "ddiFound": "{count} interaction found among {n} drugs",
+    "ddiFoundPlural": "{count} interactions found among {n} drugs",
+    "noInteractions": "No interactions found between these drugs.",
+    "drugDetails": "Drug Details",
+    "drugDetailsHint": "Click a drug to see food interactions, conditions, and targets.",
+    "tabs": {
+      "food": "Food",
+      "conditions": "Conditions",
+      "sideEffects": "Side Effects",
+      "fdaLabel": "FDA Label",
+      "targets": "Targets"
+    },
+    "noFood": "No food interactions found.",
+    "noConditions": "No condition data found.",
+    "noSideEffects": "No side effects data found (SIDER).",
+    "noFda": "No FDA label found for this drug.",
+    "noTargets": "No target data found.",
+    "severity": {
+      "major": "Major",
+      "moderate": "Moderate",
+      "minor": "Minor",
+      "unknown": "Unknown"
+    },
+    "foodTitle": "Drug-Food Interactions",
+    "foodSubtitle": "Search food and lifestyle interactions for a drug.",
+    "drugTargetTitle": "Drug-Target Interactions",
+    "drugTargetSubtitle": "Search protein targets for a drug (DrugBank).",
+    "drugConditionTitle": "Drug-Condition",
+    "drugConditionSubtitle": "Search indications and toxicity conditions for a drug.",
+    "drugResponseTitle": "Drug Response",
+    "drugResponseSubtitle": "Search IC50/AUC sensitivity data from GDSC2.",
+    "gdaTitle": "Gene-Disease Associations",
+    "gdaSubtitle": "Search gene-disease associations from DisGeNET."
+  },
+  "common": {
+    "search": "Search",
+    "loading": "Loading…",
+    "error": "An error occurred",
+    "noResults": "No results found",
+    "source": "Source",
+    "learnMore": "Learn more",
+    "close": "Close",
+    "drugName": "Drug name",
+    "selectDrug": "Select a drug",
+    "page": "Page",
+    "of": "of",
+    "results": "results",
+    "language": "Language"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences",
+    "language": "Language",
+    "languageDesc": "Choose the display language for the application",
+    "theme": "Theme",
+    "themeDesc": "Choose between light and dark mode"
+  },
+  "history": {
+    "title": "Search History",
+    "subtitle": "Your recent drug interaction searches",
+    "empty": "No search history yet",
+    "emptyHint": "Your searches will appear here",
+    "type": "Type",
+    "query": "Query",
+    "results": "Results",
+    "date": "Date"
+  },
+  "references": {
+    "title": "References & Data Sources",
+    "subtitle": "Scientific databases powering this application"
+  }
+}
